@@ -220,4 +220,36 @@ list_of_log_of_odds = predict(model3,
 lines(c(0,1),list_of_log_of_odds,col="red")
 
 #-------------------------------------------------------------------------------
+# Compare model 3 and model 4
+
+#Modelo without the interaction Married+LoanTerm
+model4 <-  glm (LStatus~Married+ApplicantIncome+LoanAmount+Loan_Amount_Term2+
+      factor(Credit_History)+Property_Area+
+      ApplicantIncome*Loan_Amount_Term2+ #interaction 1
+    family = binomial, data=LOAN_data)
+summary (model4)
+
+
+
+significance = 0.05
+
+#Compare models using pvalue and chisquare
+
+full_model_deviance = deviance(model3)
+full_df = df.residual(model3)
+
+reduced_model_deviance = deviance(model4)
+reduced_df = df.residual(model4)
+
+deviance_difference = reduced_model_deviance - full_model_deviance
+p_value = pchisq(
+  deviance_difference,
+  (reduced_df-full_df),
+  lower.tail = FALSE
+)
+
+print(p_value)
+
+
+#-------------------------------------------------------------------------------
 
