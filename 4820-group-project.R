@@ -164,7 +164,6 @@ model3 <- glm (LStatus~Married+ApplicantIncome+LoanAmount+Loan_Amount_Term2+
                family = binomial, data=LOAN_data)
 summary (model3)
 
-unique(LOAN_data$Married)
 
 #-------------------------------------------------------------------------------
 # INTERACTION GRAPH 1
@@ -194,11 +193,31 @@ lines(sequence,list_of_log_of_odds,col="red")
 
 
 
-
-
 # INTERACTION GRAPH 2
+plot(1, type = "n", #n means does not produce any points
+     xlab = "", ylab = "Loan status (log of odds)",
+     xlim = c(-0.5, 1.5), 
+     ylim = c(0, 0.2), #probabilities
+     xaxt = "n"
+)
+axis(1, at = c(0, 1),
+labels = c("Loan Amount term = 360", "Loan Amount term ≠ 360"))
+
+legend("topleft", legend = c("Married","Not married"), col = c("blue", "red"), lty=1:1, cex = 0.6)
+# = MARRIED
+list_of_log_of_odds = predict(model3,
+  newdata=data.frame(ApplicantIncome=0,Loan_Amount_Term2=c("360","≠360"),Married="Yes", Credit_History=0, Property_Area="Rural", LoanAmount=0),
+  type="response"
+)
+lines(c(0,1),list_of_log_of_odds,col="blue")
 
 
+# = NOT MARRIED
+list_of_log_of_odds = predict(model3,
+  newdata=data.frame(ApplicantIncome=0,Loan_Amount_Term2=c("360","≠360"),Married="No", Credit_History=0, Property_Area="Rural", LoanAmount=0),
+  type="response"
+)
+lines(c(0,1),list_of_log_of_odds,col="red")
 
 #-------------------------------------------------------------------------------
 
