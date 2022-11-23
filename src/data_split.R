@@ -1,3 +1,9 @@
+#Packages
+install.packages('car')
+library(car)
+
+
+
 #Put the data set on the variable "data".
 data = Loan.Approval_clean
 
@@ -5,3 +11,10 @@ data = Loan.Approval_clean
 dt = sort(sample(nrow(data), nrow(data)*.7))
 train<-data[dt,]
 test<-data[-dt,]
+
+
+#Model
+model <- lm(data$LoanAmount ~ data$ApplicantIncome + data$CoapplicantIncome, data=data)
+vif(model)
+
+
